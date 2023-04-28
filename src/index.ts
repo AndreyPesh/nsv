@@ -1,12 +1,17 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-import { logger } from './logger';
+import cookieParser from 'cookie-parser'
+import { logger } from './middleware/logger';
+import { cookieValidate } from './middleware/cookie';
+
 
 const PORT = process.env.PORT || 4000;
 
 const app = express();
+app.use(cookieParser())
 app.use(logger)
+app.use(cookieValidate)
 
 app.get('/', (req, res) => res.send({ user: 'User' }));
 
