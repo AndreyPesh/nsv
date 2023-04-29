@@ -4,6 +4,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser'
 import { logger } from './middleware/logger';
 import { cookieValidate } from './middleware/cookie';
+import { fakeError } from './middleware/error';
 
 
 const PORT = process.env.PORT || 4000;
@@ -12,6 +13,8 @@ const app = express();
 app.use(cookieParser())
 app.use(logger)
 app.use(cookieValidate)
+
+app.get('/error', fakeError)
 
 const router = express.Router()
 
@@ -55,6 +58,8 @@ app.all('*', (req, res) => {
 });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.log('Error catch');
+  
   res.status(500).send('Server internal error')
 })
 
