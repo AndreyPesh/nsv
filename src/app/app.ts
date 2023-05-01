@@ -1,65 +1,21 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, json } from 'express';
 import cookieParser from 'cookie-parser';
-import { logger } from '../middleware/logger';
-import { cookieValidate } from '../middleware/cookie';
-import { fakeError } from '../middleware/error';
+import { STATUS_CODE } from '../utils/constants/enums';
+import { ResponseServer } from '../utils/types';
+import { errorHandler } from '../middleware/errorHandler';
+import authRouter from '../routes/auth';
 
 const app = express();
 app.use(cookieParser());
-app.use(logger);
-app.use(cookieValidate);
+app.use(json());
 
-app.get('/error', fakeError);
+app.use('/auth', authRouter);
 
-const router = express.Router();
-
-// predicate the router with a check and bail out when needed
-router.use((req, res, next) => {
-  if (!req.headers['x-auth']) return next('router');
-  next();
+app.all('*', (req: Request, res: ResponseServer) => {
+  res.status(STATUS_CODE.NOT_FOUND);
+  res.json({ status: STATUS_CODE.NOT_FOUND, message: 'Page not found' });
 });
 
-router.get('/user/:id', (req, res) => {
-  res.status(200);
-  res.setHeader('Content-type', 'application/json');
-  res.send({user: 'hello, user!'});
-});
-
-// use the router and 401 anything falling through
-app.use('/admin', router, (req, res) => {
-  res.sendStatus(401);
-});
-
-app.get(
-  '/',
-  (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.method);
-    next();
-  },
-  (req, res, next) => {
-    console.log(`Time: ${Date.now()}`);
-    // throw new Error('Error did throw')
-    next();
-  }
-);
-
-app.get('/', (req, res) => res.send({ user: 'User' }));
-
-app.get('/user/:id', (req, res) => {
-  res.send({ user: req.params.id });
-});
-
-app.all('*', (req, res) => {
-  const t = req.time;
-  console.log('Time all routes: ', req.time);
-
-  res.sendStatus(404);
-});
-
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log('Error catch');
-
-  res.status(500).send('Server internal error');
-});
+app.use(errorHandler);
 
 export default app;
