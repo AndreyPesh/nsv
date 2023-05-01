@@ -1,3 +1,4 @@
 20230501	22:07:04	6ae7a3a0-ed6e-4636-8c6d-80b79c7177c0	undefined: undefined
 20230501	22:08:06	601e7948-db50-45ba-8356-5d3e20d34687	Error: Error auth
 01-05-2023	22:09:12	f52f2449-ea49-418d-b60e-566c1dfc5954	Error: Error auth
+01-05-2023	23:03:59	178aa6d6-f892-4399-b722-ee91f32f0915	Error: Cannot set headers after they are sent to the client
