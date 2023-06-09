@@ -3,17 +3,17 @@ import { faker } from '@faker-js/faker';
 import { hash } from 'argon2';
 import { PrismaService } from 'src/prisma.service';
 import { AuthDto } from './auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, jwt: JwtService) {}
   async register(dto: AuthDto) {
     const isUserExist = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
       },
     });
-    console.log(dto);
 
     if (isUserExist) throw new BadRequestException('User already exist');
 
@@ -27,5 +27,9 @@ export class AuthService {
       },
     });
     return user;
+  }
+
+  private async issueToken(userId: number) {
+    const data = {id: userId}
   }
 }
