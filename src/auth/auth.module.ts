@@ -10,6 +10,7 @@ import { getJwtConfig } from 'src/config/jwt.config';
   controllers: [AuthController],
   providers: [AuthService, PrismaService],
   imports: [
+    ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

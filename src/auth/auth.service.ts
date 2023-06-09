@@ -4,10 +4,11 @@ import { hash } from 'argon2';
 import { PrismaService } from 'src/prisma.service';
 import { AuthDto } from './auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, jwt: JwtService) {}
+  constructor(private prisma: PrismaService, private jwt: JwtService) {}
   async register(dto: AuthDto) {
     const isUserExist = await this.prisma.user.findUnique({
       where: {
@@ -30,6 +31,23 @@ export class AuthService {
   }
 
   private async issueToken(userId: number) {
-    const data = {id: userId}
+    const data = { id: userId };
+
+    const accessToken = this.jwt.sign(data, {
+      expiresIn: '1h',
+    });
+
+    const refreshToken = this.jwt.sign(data, {
+      expiresIn: '7d',
+    });
+
+    return { accessToken, refreshToken };
+  }
+
+  private returnUserFields(user: User) {
+    return {
+      id: user.id,
+      email: user.email
+    }
   }
 }
