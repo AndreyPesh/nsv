@@ -12,13 +12,14 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email      String   @unique
+  email      String    @unique
   password   String
-  name       String   @unique
-  avatarPath String   @default("/uploads/default-avatat.png") @map("avatar_path")
-  phone      String?  @default("")
+  name       String    @unique
+  avatarPath String    @default("/uploads/default-avatat.png") @map("avatar_path")
+  phone      String?   @default("")
   orders     Order[]
   reviews    Review[]
+  favorites  Product[]
 }
 
 model Product {
@@ -26,17 +27,19 @@ model Product {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  name        String      @unique
-  slug        String      @unique
+  name        String   @unique
+  slug        String   @unique
   description String
   price       Int
   images      String[]
 
-  category    Category    @relation(fields: [categoryId], references: [id])
-  categoryId  Int         @map("category_id")
-  
-  reviews     Review[]
-  orderItems  OrderItem[]
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int      @map("category_id")
+
+  reviews    Review[]
+  orderItems OrderItem[]
+  user       User?       @relation(fields: [userId], references: [id])
+  userId     Int         @map("user_id")
 }
 
 model Category {

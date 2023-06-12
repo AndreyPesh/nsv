@@ -22,7 +22,7 @@ export class UserController {
   @Auth()
   @Get('profile')
   async getProfile(@CurrentUser('id') id: number) {
-    // return this.userService.getById()
+    return this.userService.byId(id);
   }
 
   @UsePipes(new ValidationPipe())
@@ -30,7 +30,7 @@ export class UserController {
   @Auth()
   @Put('profile')
   async updateUser(@CurrentUser('id') id: number, @Body() dto: UserDto) {
-    // return this.userService.updateProfile(id, dto);
+    return this.userService.updateProfile(id, dto);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -40,6 +40,6 @@ export class UserController {
     @CurrentUser('id') id: number,
     @Param() productId: string,
   ) {
-    // return this.userService.toggleFavorite(id, productId);
+    return this.userService.toggleFavorite(id, +productId);
   }
 }
