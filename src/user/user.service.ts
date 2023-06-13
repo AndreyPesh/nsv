@@ -44,7 +44,8 @@ export class UserService {
       },
     });
 
-    if (!isSameUser && id !== isSameUser.id) {
+    //potential bug
+    if (!isSameUser && id !== isSameUser?.id) {
       throw new BadRequestException('Email already is exist');
     }
 
