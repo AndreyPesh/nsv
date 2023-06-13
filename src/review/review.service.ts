@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { returnReviewObject } from './return-review.object';
 import { ReviewDto } from './review.dto';
