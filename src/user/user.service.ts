@@ -32,7 +32,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
     return user;
   }
@@ -44,7 +44,8 @@ export class UserService {
       },
     });
 
-    if (!isSameUser && id !== isSameUser.id) {
+    //potential bug
+    if (!isSameUser && id !== isSameUser?.id) {
       throw new BadRequestException('Email already is exist');
     }
 
