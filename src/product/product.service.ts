@@ -1,6 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { productReturnObjectFullest } from './return-product.object';
+import {
+  productReturnObject,
+  productReturnObjectFullest,
+} from './return-product.object';
 import { ProductDto } from './dto/product.dto';
 import { generatingSlug } from 'src/utils/generator-slug';
 import { EnumProductSort, GetAllProductDto } from './dto/get-all.product.dto';
@@ -128,6 +131,7 @@ export class ProductService {
       orderBy: prismaSort,
       skip,
       take: perPage,
+      select: productReturnObject,
     });
 
     return {
